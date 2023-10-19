@@ -1,0 +1,122 @@
+// Gera o Prisma Client para interagir com o banco de dados.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define a fonte de dados como PostgreSQL e obtém a URL do banco de dados a partir das variáveis de ambiente.
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+// Modelo do Administrador
+model Admin {
+  // Identificador exclusivo do administrador gerado automaticamente.
+  id      String @id @default(uuid())
+  Email   String                     // Email do administrador.
+  Password String                     // Senha do administrador.
+}
+
+// Modelo da Empresa
+model Company {
+  // Identificador exclusivo da empresa gerado automaticamente.
+  id              String @id @default(uuid())
+  Name            String                     // Nome da empresa.
+  Email           String                     // Email da empresa.
+  Password        String                     // Senha da empresa
+  invoicing       Int @default(0)           // Campo para faturamento, com valor padrão 0.
+  Contact         String                     // Informações de contato da empresa.
+  BackgroundColor String?                     // Cor de fundo da empresa.
+  TextColor       String?                    // Cor do texto da empresa.
+  Logo            String                     // logotipo da empresa.
+  products        Product[]                  // Produtos pertencentes à empresa.
+
+  // Mapeia a tabela no banco de dados como "Company".
+  @@map("Company")
+}
+
+// Modelo da Categoria
+model Category {
+  // Identificador exclusivo da categoria gerado automaticamente.
+  id        String @id @default(uuid())
+  Name      String                     // Nome da categoria.
+  created_at DateTime @default(now()) // Data e hora de criação da categoria.
+  update_at DateTime @default(now()) // Data e hora da última atualização da categoria.
+  products Product[]                  // Produtos pertencentes à categoria.
+
+  // Mapeia a tabela no banco de dados como "Categories".
+  @@map("Categories")
+}
+
+// Modelo do Produto
+model Product {
+  // Identificador exclusivo do produto gerado automaticamente.
+  id        String @id @default(uuid())
+  Name      String                     // Nome do produto.
+  Price     String                     // Preço do produto.
+  Description String                   // Descrição do produto.
+  Banner    String                     // URL do banner do produto.
+  created_at DateTime @default(now()) // Data e hora de criação do produto.
+  update_at DateTime @default(now()) // Data e hora da última atualização do produto.
+  category   Category @relation(fields: [category_id], references: [id]) // Relação com a categoria do produto.
+  client    Client @relation(fields: [client_id], references: [id]) // Relação com o cliente associado ao produto.
+  company   Company @relation(fields: [company_id], references: [id]) // Relação com a empresa à qual o produto pertence.
+  items     Item[]                    // Itens relacionados ao produto.
+
+  client_id String
+  category_id String // Adicione o campo category_id
+  company_id String
+  // Mapeia a tabela no banco de dados como "Products".
+  @@map("Products")
+}
+
+// Modelo do Cliente
+model Client {
+  // Identificador exclusivo do cliente gerado automaticamente.
+  id        String @id @default(uuid())
+  Name      String                     // Nome do cliente.
+  Phone     String                     // Número de telefone do cliente.
+  Email     String                    // Email do cliente (opcional).
+  Password  String                   // Senha do cliente (opcional).
+  products  Product[]                  // Produtos adquiridos pelo cliente.
+  orders    Order[]                    // Pedidos feitos pelo cliente.
+
+  created_at DateTime @default(now()) // Data e hora de criação do cliente.
+  update_at DateTime @default(now()) // Data e hora da última atualização do cliente.
+
+  // Mapeia a tabela no banco de dados como "clients".
+  @@map("clients")
+}
+
+// Modelo do Pedido
+model Order {
+  // Identificador exclusivo do pedido gerado automaticamente.
+  id        String @id @default(uuid())
+  table     Int                        // Número da mesa do pedido.
+  status    Boolean @default(false)     // Status do pedido, com valor padrão "false".
+  payment   Boolean @default(false)     // Status de pagamento, com valor padrão "false".
+  client    Client @relation(fields: [client_id], references: [id]) // Relação com o cliente que fez o pedido.
+  client_id String
+  created_at DateTime @default(now()) // Data e hora de criação do pedido.
+  update_at DateTime @default(now()) // Data e hora da última atualização do pedido.
+  items     Item[] // Adicione a relação correspondente no modelo Order.
+
+  // Mapeia a tabela no banco de dados como "orders".
+  @@map("orders")
+}
+
+// Modelo do Item
+model Item {
+  // Identificador exclusivo do item gerado automaticamente.
+  id        String @id @default(uuid())
+  amount    Int                        // Quantidade do item.
+  created_at DateTime @default(now()) // Data e hora de criação do item.
+  update_at DateTime @default(now()) // Data e hora da última atualização do item.
+  order     Order @relation(fields: [order_id], references: [id]) // Relação com o pedido.
+  product   Product @relation(fields: [product_id], references: [id]) // Relação com o produto.
+
+  order_id String
+  product_id String
+  // Mapeia a tabela no banco de dados como "items".
+  @@map("items")
+}
