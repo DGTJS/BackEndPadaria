@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { LoginCompanyService } from "../../services/company/LoginCompanyService";
 
 
-class LoginUserController{
+class LoginCompanyController{
     async handle(req: Request, res: Response){
         const {email, password} = req.body;
 
-        const loginUserService = new LoginCompanyService();
+        const loginCompanyService = new LoginCompanyService();
 
-        const Login = await loginUserService.execute({
+        const Login = await loginCompanyService.execute({
             email,
             password
         })
@@ -18,4 +18,4 @@ class LoginUserController{
 
 }
 
-export {LoginUserController}
+export {LoginCompanyController}

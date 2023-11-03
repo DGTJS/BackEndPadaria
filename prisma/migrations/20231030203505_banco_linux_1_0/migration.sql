@@ -1,18 +1,4 @@
 -- CreateTable
-CREATE TABLE "Users" (
-    "id" TEXT NOT NULL,
-    "Name" TEXT NOT NULL,
-    "Email" TEXT NOT NULL,
-    "Password" TEXT NOT NULL,
-    "Phone" TEXT NOT NULL,
-    "invoicing" INTEGER NOT NULL DEFAULT 0,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Admin" (
     "id" TEXT NOT NULL,
     "Email" TEXT NOT NULL,
@@ -25,14 +11,13 @@ CREATE TABLE "Admin" (
 CREATE TABLE "Company" (
     "id" TEXT NOT NULL,
     "Name" TEXT NOT NULL,
+    "Email" TEXT NOT NULL,
+    "Password" TEXT NOT NULL,
+    "invoicing" INTEGER NOT NULL DEFAULT 0,
     "Contact" TEXT NOT NULL,
-    "Banner" TEXT NOT NULL,
-    "BackgroundColor" TEXT NOT NULL,
-    "TextColor" TEXT NOT NULL,
-    "LogoUrl" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "products_id" TEXT NOT NULL,
-    "clients_id" TEXT NOT NULL,
+    "BackgroundColor" TEXT,
+    "TextColor" TEXT,
+    "Logo" TEXT NOT NULL,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );
@@ -68,8 +53,8 @@ CREATE TABLE "clients" (
     "id" TEXT NOT NULL,
     "Name" TEXT NOT NULL,
     "Phone" TEXT NOT NULL,
-    "Email" TEXT,
-    "Password" TEXT,
+    "Email" TEXT NOT NULL,
+    "Password" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -101,18 +86,6 @@ CREATE TABLE "items" (
     CONSTRAINT "items_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_CompanyToUser" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateIndex
-CREATE UNIQUE INDEX "_CompanyToUser_AB_unique" ON "_CompanyToUser"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_CompanyToUser_B_index" ON "_CompanyToUser"("B");
-
 -- AddForeignKey
 ALTER TABLE "Products" ADD CONSTRAINT "Products_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -130,9 +103,3 @@ ALTER TABLE "items" ADD CONSTRAINT "items_order_id_fkey" FOREIGN KEY ("order_id"
 
 -- AddForeignKey
 ALTER TABLE "items" ADD CONSTRAINT "items_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CompanyToUser" ADD CONSTRAINT "_CompanyToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CompanyToUser" ADD CONSTRAINT "_CompanyToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

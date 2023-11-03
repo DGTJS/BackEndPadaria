@@ -6,14 +6,13 @@ interface CompanyRequest{
     Email: string
     Password: string
     Contact: string
-    Logo: string
 }
 
 class CreateCompanyService{
-    async execute({Name, Email, Password, Contact, Logo,}: CompanyRequest){
+    async execute({Name, Email, Password, Contact}: CompanyRequest){
 
         if(!Email){
-            throw new Error("email Incorreto")
+            throw new Error("Email ou senha incorreto")
         }
 
         const companyAlreadyExist = await prismaClient.company.findFirst({
@@ -33,7 +32,6 @@ class CreateCompanyService{
                 Email: Email,
                 Password: passwordHash,
                 Contact: Contact,
-                Logo: Logo,
             }
         })
         return company

@@ -28,7 +28,10 @@ class LoginAdminService{
             throw new Error("E-mail ou Senha incorreto")
         }
 
-        return({ok:true})
+        return({
+            email:admin.Email,
+            password:admin.Password
+        })
             }
 }
 
