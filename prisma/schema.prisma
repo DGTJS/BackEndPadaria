@@ -108,6 +108,7 @@ model Item {
   order      Order    @relation(fields: [order_id], references: [id]) // Relação com o pedido.
   product    Product  @relation(fields: [product_id], references: [id]) // Relação com o produto.
 
+  
   order_id   String
   product_id String
 

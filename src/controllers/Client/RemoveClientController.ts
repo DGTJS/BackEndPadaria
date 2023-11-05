@@ -1,7 +1,7 @@
 import { Response,Request } from "express";
 import { RemoveClientService } from "../../services/client/RemoveClientService";
 
-class RemoveOrderController{        
+class RemoveClientController{        
     async handle(req: Request, res:Response){
         const client_id = req.query.client_id as string;
 
@@ -16,4 +16,4 @@ class RemoveOrderController{
     }
 }
 
-export {RemoveOrderController}
+export {RemoveClientController}

@@ -22,6 +22,9 @@ import uploadConfig from './config/multer'
 import { ListByCategoryController } from "./controllers/product/ListByCategoryController";
 import { CreateOrderController } from "./controllers/order/CreateOrderController";
 import { RemoveOrderController } from "./controllers/order/RemoveOrderController";
+import { RemoveClientController } from "./controllers/Client/RemoveClientController";
+import { AddItemController } from "./controllers/order/AddItemController";
+import { RemoveCompanyController } from "./controllers/company/RemoveCompanyController";
 
 const router = Router();
 
@@ -44,7 +47,8 @@ router.get('/me/client', isAuthenticated, new DetailClientController().handle)
 router.get('/me/admin', isAuthenticated, new DetailAdminController().handle)
 
 // DELETE USER
-router.delete('/client', isAuthenticated, new RemoveOrderController().handle)
+router.delete('/client', isAuthenticated, new RemoveClientController().handle)
+router.delete('/company', isAuthenticated, new RemoveCompanyController().handle)
 
 // ROTAS CATEGORY
 router.post('/category', isAuthenticated, new CreateCategoryController().handle)
@@ -54,11 +58,10 @@ router.get('/category', isAuthenticated, new ListCategoryController().handle)
 router.post('/product', isAuthenticated, upload.single('file'),new CreateProductController().handle)
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle)
 
-
 // PEDIDOS/ORDER
-
 router.post('/order', isAuthenticated, new CreateOrderController().handle)  
 router.delete('/order', isAuthenticated, new RemoveOrderController().handle)
+router.post('/order/add', isAuthenticated, new AddItemController().handle)
 
 
 export { router };
