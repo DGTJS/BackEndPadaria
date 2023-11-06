@@ -17,20 +17,55 @@ model Admin {
   Password String // Senha do administrador.
 }
 
-// Modelo da Empresa
 model Company {
   // Identificador exclusivo da empresa gerado automaticamente.
   id        String    @id @default(uuid())
   Name      String // Nome da empresa.
   Email     String // Email da empresa.
-  Password  String // Senha da empresa
+  Password  String // Senha da empresa  
+  Banner     String // URL do banner do produto.
+  address   String  // Endereço da empresa
   invoicing Int       @default(0) // Campo para faturamento, com valor padrão 0.
   Contact   String // Informações de contato da empresa.
   Signature Boolean   @default(false)
 
   // Mapeia a tabela no banco de dados como "Company".
   @@map("Company")
+
+  // Adicione esta relação para associar uma empresa com suas orders.
+  orders    Order[]
+
+  // Adicione esta relação para associar uma empresa com suas categorias.
+  categories Category[]
+
+  // Adicione esta relação para associar uma empresa com seus produtos.
+  products Product[]
+
+  // Adicione esta relação para associar uma empresa com seus items.
+  items     Item[] @relation("CompanyItems")
 }
+
+model Item {
+  // Identificador exclusivo do item gerado automaticamente.
+  id         String   @id @default(uuid())
+  amount     Int // Quantidade do item.
+  created_at DateTime @default(now()) // Data e hora de criação do item.
+  update_at  DateTime @default(now()) // Data e hora da última atualização do item.
+  order      Order    @relation(fields: [order_id], references: [id]) // Relação com o pedido.
+  product    Product  @relation(fields: [product_id], references: [id]) // Relação com o produto.
+
+  order_id   String
+  product_id String // Adicione o campo product_id
+
+  // Mapeia a tabela no banco de dados como "items".
+  @@map("items")
+
+  // Adicione esta relação inversa para associar um item a uma empresa.
+  company   Company @relation("CompanyItems", fields: [company_id], references: [id])
+  company_id String
+}
+
+
 
 // Modelo da Categoria
 model Category {
@@ -43,6 +78,10 @@ model Category {
 
   // Mapeia a tabela no banco de dados como "Categories".
   @@map("Categories")
+
+  // Adicione esta relação para associar uma categoria a uma empresa.
+  company   Company @relation(fields: [company_id], references: [id])
+  company_id String
 }
 
 // Modelo do Produto
@@ -58,10 +97,14 @@ model Product {
   category    Category @relation(fields: [category_id], references: [id]) // Relação com a categoria do produto.
   items       Item[] // Itens relacionados ao produto.
 
-  category_id String // Adicione o campo category_id
+  category_id String
 
   // Mapeia a tabela no banco de dados como "Products".
   @@map("Products")
+
+  // Adicione esta relação para associar um produto a uma empresa.
+  company   Company @relation(fields: [company_id], references: [id])
+  company_id String
 }
 
 // Modelo do Cliente
@@ -70,10 +113,10 @@ model Client {
   id       String    @id @default(uuid())
   Name     String // Nome do cliente.
   Phone    String // Número de telefone do cliente.
-  Email    String // Email do cliente (opcional).
-  Password String // Senha do cliente (opcional).
+  Email    String // Email do cliente.
+  Password String // Senha do cliente.
   orders   Order[] // Pedidos feitos pelo cliente.
-
+  address  String // Endereço do Cliente
   created_at DateTime @default(now()) // Data e hora de criação do cliente.
   update_at  DateTime @default(now()) // Data e hora da última atualização do cliente.
 
@@ -81,11 +124,13 @@ model Client {
   @@map("clients")
 }
 
+
+
 // Modelo do Pedido
 model Order {
   // Identificador exclusivo do pedido gerado automaticamente.
   id         String   @id @default(uuid())
-  name      String // Nome do pedido.
+  name       String // Nome do pedido.
   status     Boolean  @default(false) // Status do pedido, com valor padrão "false".
   payment    Boolean  @default(false) // Status de pagamento, com valor padrão "false".
   client     Client   @relation(fields: [client_id], references: [id]) // Relação com o cliente que fez o pedido.
@@ -93,25 +138,12 @@ model Order {
   created_at DateTime @default(now()) // Data e hora de criação do pedido.
   update_at  DateTime @default(now()) // Data e hora da última atualização do pedido.
   items      Item[] // Adicione a relação correspondente no modelo Order.
+  scheduledTime DateTime? @default(now()) // Campo de data e hora agendado (opcional).
 
   // Mapeia a tabela no banco de dados como "orders".
   @@map("orders")
-}
 
-// Modelo do Item
-model Item {
-  // Identificador exclusivo do item gerado automaticamente.
-  id         String   @id @default(uuid())
-  amount     Int // Quantidade do item.
-  created_at DateTime @default(now()) // Data e hora de criação do item.
-  update_at  DateTime @default(now()) // Data e hora da última atualização do item.
-  order      Order    @relation(fields: [order_id], references: [id]) // Relação com o pedido.
-  product    Product  @relation(fields: [product_id], references: [id]) // Relação com o produto.
-
-  
-  order_id   String
-  product_id String
-
-  // Mapeia a tabela no banco de dados como "items".
-  @@map("items")
+  // Adicione esta relação para associar um pedido a uma empresa.
+  company   Company @relation(fields: [company_id], references: [id])
+  company_id String
 }

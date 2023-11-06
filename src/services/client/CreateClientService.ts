@@ -7,10 +7,11 @@ interface ClientRequest {
   Phone: string;
   Email: string;
   Password: string;
+  address: string
 }
 
 class CreateClientService {
-  async execute({ Name, Phone, Email, Password }: ClientRequest) {
+  async execute({ Name, Phone, Email, Password, address }: ClientRequest) {
     if (!Email) {
       // Verificar se o usuário já existe apenas se o email for fornecido
       throw new Error("Email Incorreto")
@@ -34,6 +35,7 @@ class CreateClientService {
           Email: Email,
           Password: passwordHash,
           Phone: Phone,
+          address: address
         },
       });
       return client

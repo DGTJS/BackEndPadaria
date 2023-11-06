@@ -32,7 +32,7 @@ const upload = multer(uploadConfig.upload("./tmp"))
 
 
 // CREATE USER
-router.post('/company', new CreateCompanyController().handle);
+router.post('/company', upload.single('file'), new CreateCompanyController().handle);
 router.post('/admin', new CreateAdminController().handle);
 router.post('/client', new CreateClientController().handle);
 

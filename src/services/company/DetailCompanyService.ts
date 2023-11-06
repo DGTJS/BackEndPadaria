@@ -11,6 +11,7 @@ class DetailCompanyService{
             id: true,
             Name:true,
             Email:true,
+            address: true,
             invoicing: true,
             Contact: true,
             Signature: true

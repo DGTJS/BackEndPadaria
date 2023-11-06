@@ -6,10 +6,12 @@ interface CompanyRequest{
     Email: string
     Password: string
     Contact: string
+    Banner: string
+    address: string
 }
 
 class CreateCompanyService{
-    async execute({Name, Email, Password, Contact}: CompanyRequest){
+    async execute({Name, Email, Password, Contact, Banner, address}: CompanyRequest){
 
         if(!Email){
             throw new Error("Email ou senha incorreto")
@@ -32,6 +34,8 @@ class CreateCompanyService{
                 Email: Email,
                 Password: passwordHash,
                 Contact: Contact,
+                Banner: Banner,
+                address: address
             }
         })
         return company

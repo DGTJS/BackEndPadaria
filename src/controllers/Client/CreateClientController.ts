@@ -4,11 +4,11 @@ import { CreateClientService } from "../../services/client/CreateClientService";
 class CreateClientController{
     async handle(req: Request, res:Response){
     
-    const {Name, Phone, Email, Password} = req.body
+    const {Name, Phone, Email, Password, address} = req.body
 
     const createClientService = new CreateClientService();
 
-    const client = await createClientService.execute({Name,Phone,Email,Password})
+    const client = await createClientService.execute({Name,Phone,Email,Password, address})
 
     return res.json(client)
 }
