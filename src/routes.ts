@@ -26,6 +26,14 @@ import { RemoveClientController } from "./controllers/Client/RemoveClientControl
 import { AddItemController } from "./controllers/order/AddItemController";
 import { RemoveCompanyController } from "./controllers/company/RemoveCompanyController";
 import { RemoveItemController } from "./controllers/order/RemoveItemController";
+import { ConfirmedOrderController } from "./controllers/order/ConfirmedOrderController";
+import { UpdateCompanyController } from "./controllers/company/UpdateCompanyController";
+import { UpdateClientController } from "./controllers/Client/UpdateClientController";
+import { ConfirmedPaymentController } from "./controllers/order/ConfirmedPaymentController";
+import { RemoveProductController } from "./controllers/product/RemoveOrderController";
+import { ListOrderController } from "./controllers/order/ListOrderController";
+import { DetailOrderController } from "./controllers/order/DetailOrderController";
+import { FinishOrderController } from "./controllers/order/FinishOrderController";
 
 const router = Router();
 
@@ -40,7 +48,7 @@ router.post('/client', new CreateClientController().handle);
 // LOGIN USER
 router.post('/login/company', new LoginCompanyController().handle)
 router.post('/login/client', new LoginClientController().handle)
-router.post('/admin/login', new LoginAdminController().handle)
+router.post('/devank/login', new LoginAdminController().handle)
 
 // DETAILS USER
 router.get('/me/company', isAuthenticated, new DetailCompanyController().handle)
@@ -58,11 +66,24 @@ router.get('/category', isAuthenticated, new ListCategoryController().handle)
 // PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'),new CreateProductController().handle)
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle)
+router.delete('/Product', isAuthenticated, new RemoveProductController().handle)
+
 
 // PEDIDOS/ORDER
 router.post('/order', isAuthenticated, new CreateOrderController().handle)  
 router.delete('/order', isAuthenticated, new RemoveOrderController().handle)
 router.post('/order/add', isAuthenticated, new AddItemController().handle)
 router.delete('/order/delete', isAuthenticated, new RemoveItemController().handle)
+router.get('/orders', isAuthenticated, new ListOrderController().handle)
+router.get('/order/detail', isAuthenticated, new DetailOrderController().handle)
+
+
+// ATUALIZAÇÃO DE DADOS
+router.put('/order/confirmed', isAuthenticated, new ConfirmedOrderController().handle)
+router.put('/company/change', isAuthenticated, new UpdateCompanyController().handle)
+router.put('/client/change', isAuthenticated, new UpdateClientController().handle)
+router.put('/order/confirmed/payment' ,isAuthenticated, new ConfirmedPaymentController().handle)
+router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)
+
 
 export { router };

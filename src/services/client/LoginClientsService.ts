@@ -48,7 +48,10 @@ class LoginClientService {
       name:client.Name,
       email:client.Email,
       password:client.Password,
-      phone:client.Phone
+      phone:client.Phone,
+      address:client.address,
+      token: token
+      
     });
   }
 }
