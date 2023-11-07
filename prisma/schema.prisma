@@ -28,7 +28,7 @@ model Company {
   invoicing Int       @default(0) // Campo para faturamento, com valor padrão 0.
   Contact   String // Informações de contato da empresa.
   Signature Boolean   @default(false)
-
+  categoryCompany String
   // Mapeia a tabela no banco de dados como "Company".
   @@map("Company")
 
