@@ -22,7 +22,7 @@ class LoginCompanyService{
         }
 
         // Verifica se a senha está correta
-        const passwordMatch =  await compare(password, company.Password)
+        const passwordMatch =  await compare(password, company.password)
 
         // Erro caso estejá incorreto
         if(!passwordMatch){
@@ -31,10 +31,13 @@ class LoginCompanyService{
 
         // se deu tudo certo vamos gerar um token para usuario
         const token = sign({
-            name: company.Name,
-            email: company.Email,
-            password: company.Password,
-            contact: company.Contact,
+            id:company.id,
+            name:company.Name,
+            email:company.Email,
+            address:company.address,
+            contact:company.Contact,
+            signature:company.signature,
+            invoicing: company.invoicing,
         },
         process.env.JWT_SECRET,{
             subject: company.id,
@@ -46,8 +49,9 @@ class LoginCompanyService{
             id:company.id,
             name:company.Name,
             email:company.Email,
+            address:company.address,
             contact:company.Contact,
-            Signature:company.Signature,
+            signature:company.signature,
             invoicing: company.invoicing,
             token: token
         }

@@ -9,9 +9,10 @@ class DetailClientService{
             },
             select:{
                 id: true,
-                Name: true,
-                Email: true,
-                Phone: true,
+                name: true,
+                email: true,
+                phone: true,
+                address: true,
             }
         })
     

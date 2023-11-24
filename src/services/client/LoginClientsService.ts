@@ -12,7 +12,7 @@ class LoginClientService {
     // Procurar o cliente com base no e-mail
     const client = await prismaClient.client.findFirst({
       where: {
-        Email: email,
+        email: email,
       },
     });
 
@@ -22,7 +22,7 @@ class LoginClientService {
     }
 
     // Verificar se a senha está correta
-    const passwordMatch = await compare(password, client.Password);
+    const passwordMatch = await compare(password, client.password);
 
     // Se a senha estiver incorreta, lançar um erro
     if (!passwordMatch) {
@@ -32,10 +32,11 @@ class LoginClientService {
     // se deu tudo certo vamos gerar um token para usuario
 
     const token = sign({
-      name:client.Name,
-      email:client.Email,
-      password:client.Password,
-      phone:client.Phone,
+      name:client.name,
+      email:client.email,
+      password:client.password,
+      phone:client.phone,
+      address:client.address,
     },
     process.env.JWT_SECRET,{
       subject: client.id,
@@ -45,10 +46,10 @@ class LoginClientService {
 
     return ({
       id:client.id,
-      name:client.Name,
-      email:client.Email,
-      password:client.Password,
-      phone:client.Phone,
+      name:client.name,
+      email:client.email,
+      password:client.password,
+      phone:client.phone,
       address:client.address,
       token: token
       

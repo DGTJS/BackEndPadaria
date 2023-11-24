@@ -14,7 +14,8 @@ class DetailCompanyService{
             address: true,
             invoicing: true,
             Contact: true,
-            Signature: true
+            banner: true,
+            signature: true
         }
     })
 

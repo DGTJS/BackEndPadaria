@@ -2,40 +2,40 @@ import prismaClient from "../../prisma";
 import { hash } from "bcryptjs";
 
 interface CompanyRequest{
-    Name: string
-    Email: string
-    Password: string
-    Contact: string
-    Banner: string
+    name: string
+    email: string
+    password: string
+    contact: string
+    banner?: string
     address: string
     categoryCompany: string
 }
 
 class CreateCompanyService{
-    async execute({Name, Email, Password, Contact, Banner, address, categoryCompany}: CompanyRequest){
+    async execute({name, email, password, contact, banner, address, categoryCompany}: CompanyRequest){
 
-        if(!Email){
+        if(!email){
             throw new Error("Email ou senha incorreto")
         }
 
         const companyAlreadyExist = await prismaClient.company.findFirst({
             where:{
-                Email: Email
+                Email: email
             }
         })
         if(companyAlreadyExist){
             throw new Error("Usuário já existe")
         }
 
-        const passwordHash = await hash(Password, 7)
+        const passwordHash = await hash(password, 7)
 
         const company = await prismaClient.company.create({
             data:{
-                Name: Name,
-                Email: Email,
-                Password: passwordHash,
-                Contact: Contact,
-                Banner: Banner,
+                Name: name,
+                Email: email,
+                password: passwordHash,
+                Contact: contact,
+                banner: banner,
                 address: address,
                 categoryCompany: categoryCompany
             }

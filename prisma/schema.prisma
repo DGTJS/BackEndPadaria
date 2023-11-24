@@ -19,21 +19,19 @@ model Admin {
 
 model Company {
   // Identificador exclusivo da empresa gerado automaticamente.
-  id        String    @id @default(uuid())
-  Name      String // Nome da empresa.
-  Email     String // Email da empresa.
-  Password  String // Senha da empresa  
-  Banner     String // URL do banner do produto.
-  address   String  // Endereço da empresa
-  invoicing Int       @default(0) // Campo para faturamento, com valor padrão 0.
-  Contact   String // Informações de contato da empresa.
-  Signature Boolean   @default(false)
+  id              String  @id @default(uuid())
+  Name            String // Nome da empresa.
+  Email           String // Email da empresa.
+  password        String // Senha da empresa  
+  banner          String? // URL do banner do produto.
+  address         String // Endereço da empresa
+  invoicing       Int     @default(0) // Campo para faturamento, com valor padrão 0.
+  Contact         String // Informações de contato da empresa.
+  signature       Boolean @default(false)
   categoryCompany String
-  // Mapeia a tabela no banco de dados como "Company".
-  @@map("Company")
 
   // Adicione esta relação para associar uma empresa com suas orders.
-  orders    Order[]
+  orders Order[]
 
   // Adicione esta relação para associar uma empresa com suas categorias.
   categories Category[]
@@ -42,7 +40,10 @@ model Company {
   products Product[]
 
   // Adicione esta relação para associar uma empresa com seus items.
-  items     Item[] @relation("CompanyItems")
+  items Item[] @relation("CompanyItems")
+
+  // Mapeia a tabela no banco de dados como "Company".
+  @@map("Company")
 }
 
 model Item {
@@ -57,15 +58,13 @@ model Item {
   order_id   String
   product_id String // Adicione o campo product_id
 
+  // Adicione esta relação inversa para associar um item a uma empresa.
+  company    Company @relation("CompanyItems", fields: [company_id], references: [id])
+  company_id String
+
   // Mapeia a tabela no banco de dados como "items".
   @@map("items")
-
-  // Adicione esta relação inversa para associar um item a uma empresa.
-  company   Company @relation("CompanyItems", fields: [company_id], references: [id])
-  company_id String
 }
-
-
 
 // Modelo da Categoria
 model Category {
@@ -76,12 +75,12 @@ model Category {
   update_at  DateTime  @default(now()) // Data e hora da última atualização da categoria.
   products   Product[] // Produtos pertencentes à categoria.
 
+  // Adicione esta relação para associar uma categoria a uma empresa.
+  company    Company @relation(fields: [company_id], references: [id])
+  company_id String
+
   // Mapeia a tabela no banco de dados como "Categories".
   @@map("Categories")
-
-  // Adicione esta relação para associar uma categoria a uma empresa.
-  company   Company @relation(fields: [company_id], references: [id])
-  company_id String
 }
 
 // Modelo do Produto
@@ -99,24 +98,24 @@ model Product {
 
   category_id String
 
+  // Adicione esta relação para associar um produto a uma empresa.
+  company    Company @relation(fields: [company_id], references: [id])
+  company_id String
+
   // Mapeia a tabela no banco de dados como "Products".
   @@map("Products")
-
-  // Adicione esta relação para associar um produto a uma empresa.
-  company   Company @relation(fields: [company_id], references: [id])
-  company_id String
 }
 
 // Modelo do Cliente
 model Client {
   // Identificador exclusivo do cliente gerado automaticamente.
-  id       String    @id @default(uuid())
-  Name     String // Nome do cliente.
-  Phone    String // Número de telefone do cliente.
-  Email    String // Email do cliente.
-  Password String // Senha do cliente.
-  orders   Order[] // Pedidos feitos pelo cliente.
-  address  String // Endereço do Cliente
+  id         String   @id @default(uuid())
+  name       String // Nome do cliente.
+  phone      String // Número de telefone do cliente.
+  email      String // Email do cliente.
+  password   String // Senha do cliente.
+  orders     Order[] // Pedidos feitos pelo cliente.
+  address    String // Endereço do Cliente
   created_at DateTime @default(now()) // Data e hora de criação do cliente.
   update_at  DateTime @default(now()) // Data e hora da última atualização do cliente.
 
@@ -124,26 +123,24 @@ model Client {
   @@map("clients")
 }
 
-
-
 // Modelo do Pedido
 model Order {
   // Identificador exclusivo do pedido gerado automaticamente.
-  id         String   @id @default(uuid())
-  name       String // Nome do pedido.
-  status     Boolean  @default(false) // Status do pedido, com valor padrão "false".
-  payment    Boolean  @default(false) // Status de pagamento, com valor padrão "false".
-  client     Client   @relation(fields: [client_id], references: [id]) // Relação com o cliente que fez o pedido.
-  client_id  String
-  created_at DateTime @default(now()) // Data e hora de criação do pedido.
-  update_at  DateTime @default(now()) // Data e hora da última atualização do pedido.
-  items      Item[] // Adicione a relação correspondente no modelo Order.
+  id            String    @id @default(uuid())
+  name          String // Nome do pedido.
+  status        Boolean   @default(false) // Status do pedido, com valor padrão "false".
+  payment       Boolean   @default(false) // Status de pagamento, com valor padrão "false".
+  client        Client    @relation(fields: [client_id], references: [id]) // Relação com o cliente que fez o pedido.
+  client_id     String
+  created_at    DateTime  @default(now()) // Data e hora de criação do pedido.
+  update_at     DateTime  @default(now()) // Data e hora da última atualização do pedido.
+  items         Item[] // Adicione a relação correspondente no modelo Order.
   scheduledTime DateTime? @default(now()) // Campo de data e hora agendado (opcional).
+
+  // Adicione esta relação para associar um pedido a uma empresa.
+  company    Company @relation(fields: [company_id], references: [id])
+  company_id String
 
   // Mapeia a tabela no banco de dados como "orders".
   @@map("orders")
-
-  // Adicione esta relação para associar um pedido a uma empresa.
-  company   Company @relation(fields: [company_id], references: [id])
-  company_id String
 }

@@ -3,39 +3,39 @@ import { hash } from "bcryptjs";
 
 
 interface ClientRequest {
-  Name: string;
-  Phone: string;
-  Email: string;
-  Password: string;
+  name: string;
+  phone: string;
+  email: string;
+  password: string;
   address: string
 }
 
 class CreateClientService {
-  async execute({ Name, Phone, Email, Password, address }: ClientRequest) {
+  async execute({ name, phone, email, password, address }: ClientRequest) {
 
-    if (!Email) {
+    if (!email) {
 
       throw new Error("Email Incorreto")
         }
 
         const ClientAlreadyExist = await prismaClient.client.findFirst({
           where:{
-            Email: Email
+            email: email
           }
         })
         if (ClientAlreadyExist) {
         throw new Error("Usuário já existe");
       }
       
-      const passwordHash = await hash(Password, 7)
+      const passwordHash = await hash(password, 7)
 
 
       const client = await prismaClient.client.create({
         data: {
-          Name: Name,
-          Email: Email,
-          Password: passwordHash,
-          Phone: Phone,
+          name: name,
+          email: email,
+          password: passwordHash,
+          phone: phone,
           address: address
         },
       });

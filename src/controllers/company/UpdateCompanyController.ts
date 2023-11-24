@@ -3,7 +3,7 @@ import { UpdateCompanyService } from "../../services/company/UpdateCompanyServic
 
 class UpdateCompanyController{
     async handle(req:Request, res:Response){
-        const {company_Id, password, email, contact, address, Signature} = req.body;
+        const {company_Id, password, email, contact, address, signature} = req.body;
 
         const updateCompanyService = new UpdateCompanyService();
 
@@ -13,7 +13,7 @@ class UpdateCompanyController{
             email,
             contact,
             address,
-            Signature,
+            signature,
         })
 
         return update

@@ -41,8 +41,7 @@ const upload = multer(uploadConfig.upload("./tmp"))
 
 
 // CREATE USER
-router.post('/company', upload.single('file'), new CreateCompanyController().handle);
-router.post('/admin', new CreateAdminController().handle);
+router.post('/company', new CreateCompanyController().handle);
 router.post('/client', new CreateClientController().handle);
 
 // LOGIN USER
@@ -80,7 +79,7 @@ router.get('/order/detail', isAuthenticated, new DetailOrderController().handle)
 
 // ATUALIZAÇÃO DE DADOS
 router.put('/order/confirmed', isAuthenticated, new ConfirmedOrderController().handle)
-router.put('/company/change', isAuthenticated, new UpdateCompanyController().handle)
+router.put('/company/change', upload.single('file'),isAuthenticated, new UpdateCompanyController().handle)
 router.put('/client/change', isAuthenticated, new UpdateClientController().handle)
 router.put('/order/confirmed/payment' ,isAuthenticated, new ConfirmedPaymentController().handle)
 router.put('/order/finish', isAuthenticated, new FinishOrderController().handle)

@@ -12,18 +12,18 @@ interface UpdateClientRequest{
 class UpdateClientService {
     async execute({ client_id, phone, email, password, address }: UpdateClientRequest) {
       const data: {
-        Email?: string;
-        Password?: string;
-        Phone?: string;
+        email?: string;
+        password?: string;
+        phone?: string;
         address?: string;
       } = {};
   
-      if (email) data.Email = email;
-      if (phone) data.Phone = phone;
+      if (email) data.email = email;
+      if (phone) data.phone = phone;
       if (address) data.address = address;
       if (password) {
         const passwordHash = await hash(password, 7);
-        data.Password = passwordHash;
+        data.password = passwordHash;
       }
   
       const updateClient = await prismaClient.client.update({

@@ -3,20 +3,14 @@ import { CreateCompanyService } from "../../services/company/CreateCompanyServic
 
 class CreateCompanyController{
     async handle(req: Request, res: Response){
-        const { Name, Email, Password, Contact, address, categoryCompany} = req.body
+        const { name, email, password, contact, address, categoryCompany} = req.body
 
-        if(!req.file){
-            throw new Error("error upload file")
-        }else{
-            const {originalname, filename: Banner} = req.file;  
-
-
+        
         const createCompanyService = new CreateCompanyService();
 
-        const user = await createCompanyService.execute({Name, Email, Password, Contact, Banner, address, categoryCompany})
+        const user = await createCompanyService.execute({name, email, password, contact, address, categoryCompany})
 
         return res.json(user)
-    }
 }
 }
 
